@@ -292,40 +292,15 @@
     }
 
     function getRequiredExp(currentExp, targetRow) {
-      return Math.max(0, targetRow.exp_sum - currentExp);
+      return Math.max(0, targetRow.exp - currentExp);
     }
 
-    function getRequiredCredits(currentExp, targetRow, data) {
-      if (currentExp >= targetRow.exp_sum) return 0;
-
-      let total = 0;
-      let previousExpSum = 0;
-
-      for (const row of data) {
-        if (row.rank <= 1) {
-          previousExpSum = row.exp_sum;
-          continue;
-        }
-
-        const segmentStart = previousExpSum;
-        const segmentEnd = row.exp_sum;
-        previousExpSum = row.exp_sum;
-
-        if (currentExp >= segmentEnd) continue;
-        if (segmentStart >= targetRow.exp_sum) break;
-
-        const effectiveStart = Math.max(currentExp, segmentStart);
-        const effectiveEnd = Math.min(targetRow.exp_sum, segmentEnd);
-        const segmentLength = segmentEnd - segmentStart;
-        const neededLength = effectiveEnd - effectiveStart;
-
-        if (neededLength > 0 && segmentLength > 0) {
-          total += row.credit * (neededLength / segmentLength);
-        }
-      }
-
-      return Math.ceil(total);
+    function getRequiredCredits(currentExp, targetRow) {
+      if (currentExp >= targetRow.exp) return 0;
+      return Math.max(0, targetRow.credit_sum || 0);
     }
+
+    
 
     function parseBudgetCell(cell) {
       if (!cell) return null;
@@ -396,7 +371,7 @@
 
       try {
         const data = await loadTierData(tier);
-        const maxExp = Math.max(...data.map(row => row.exp_sum || 0));
+        const maxExp = Math.max(...data.map(row => row.exp || 0));
         const safeExp = Math.min(currentExp, maxExp);
 
         const html = TARGET_RANKS.map(rank => {
@@ -411,8 +386,8 @@
           }
 
           const requiredExp = getRequiredExp(safeExp, row);
-          const requiredCredits = getRequiredCredits(safeExp, row, data);
-          const isAlreadyEnough = safeExp >= row.exp_sum;
+          const requiredCredits = getRequiredCredits(safeExp, row);
+          const isAlreadyEnough = safeExp >= row.exp;
           const badgeRequirement = isAlreadyEnough ? null : getBadgeRequirement(row);
 
           return buildRankCard(rank, requiredExp, requiredCredits, badgeRequirement, isAlreadyEnough);

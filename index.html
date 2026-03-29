@@ -343,7 +343,7 @@
 
     <div id="results" class="result-grid"></div>
 
-    <div class="card footer-note">
+    <div class="footer">
       このツールは，wotb asia <img src="images/fk.jpg" class="emoji-like">[-SU-]クランによって作成されました．詳しくは→ <a href="https://sorryimnub.github.io/WorldOfTanksBlitz_SUclan_requirements/" target="_blank" rel="noopener noreferrer"> -SU- クラン </a><br>
     </div>
 
@@ -569,7 +569,7 @@
       const currentExp = parseNumberInput(currentExpInput.value);
 
       if (Number.isNaN(currentExp) || currentExp < 0) {
-        setStatus('経験値の入力形式が不正です．例: 4M / 32.4k / 125000', 'bad');
+        setStatus('経験値の入力形式が不正です．全角は使用できません．例: 4M / 32.4k / 125000', 'bad');
         resultsEl.innerHTML = '';
         lastCalculation = null;
         return;

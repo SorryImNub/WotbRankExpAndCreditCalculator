@@ -266,6 +266,11 @@
         </div>
 
         <div>
+          <label for="currentRank">現在のRank</label>
+          <select id="currentRank"></select>
+        </div>
+
+        <div>
           <label for="currentExp">現在の経験値</label>
           <input id="currentExp" type="text" placeholder="例: 4M / 32.4k / 125000" />
         </div>
@@ -382,6 +387,7 @@
     const calcBtn = document.getElementById('calcBtn');
     const tierSelect = document.getElementById('tierSelect');
     const currentExpInput = document.getElementById('currentExp');
+    const currentRankSelect = document.getElementById('currentRank');
     const optionElements = {
       premium: document.getElementById('optPremium'),
       epic: document.getElementById('optEpic'),
@@ -454,9 +460,11 @@
       return Math.max(0, targetRow.exp - currentExp);
     }
 
-    function getRequiredCredits(currentExp, targetRow) {
-      if (currentExp >= targetRow.exp) return 0;
-      return Math.max(0, targetRow.credit_sum || 0);
+    function getRequiredCredits(currentRank, data, targetRow) {
+      const currentRankRow = getRankRow(data, currentRank);
+      const currentCreditSum = currentRankRow ? (currentRankRow.credit_sum || 0) : 0;
+      const targetCreditSum = targetRow.credit_sum || 0;
+      return Math.max(0, targetCreditSum - currentCreditSum);
     }
 
     
@@ -511,7 +519,7 @@
               `).join('')}
           </div>
         `
-        : '<div class="line muted">このRankにはバッジ条件の設定がありません．</div>';
+        : '';
 
       const winsNeeded = getWinsNeeded(requiredExp);
 
@@ -521,15 +529,15 @@
             <img src="images/${rank}.jpg" class="emoji-like">
             Rank ${rank}
           </div>
-          <div class="line">必要EXP: <img src="images/exp.jpg" class="emoji-like"><strong>${formatNumber(requiredExp)}</strong></div>
-          <div class="line">必要クレジット: <img src="images/credit.jpg" class="emoji-like"><strong>${formatNumber(requiredCredits)}</strong></div>
-          <div class="line">必要勝利数: <strong>${formatNumber(winsNeeded)}</strong></div>
+          <div class="line">必要残EXP: <img src="images/exp.jpg" class="emoji-like"><strong>${formatNumber(requiredExp)}</strong></div>
+          <div class="line">必要残クレジット: <img src="images/credit.jpg" class="emoji-like"><strong>${formatNumber(requiredCredits)}</strong></div>
+          <div class="line">あと <strong>${formatNumber(winsNeeded)}</strong> 勝</div>
           ${badgeHtml}
         </div>
       `;
     }
 
-    function renderResults(data, safeExp, tier) {
+    function renderResults(data, safeExp, tier, currentRank) {
       const html = TARGET_RANKS.map(rank => {
         const row = getRankRow(data, rank);
         if (!row) {
@@ -545,18 +553,19 @@
         }
 
         const requiredExp = getRequiredExp(safeExp, row);
-        const requiredCredits = getRequiredCredits(safeExp, row);
+        const requiredCredits = getRequiredCredits(currentRank, data, row);
         const badgeRequirement = getBadgeRequirement(row);
 
         return buildRankCard(rank, requiredExp, requiredCredits, badgeRequirement);
       }).join('');
 
       resultsEl.innerHTML = html;
-      setStatus(`Tier${tier} のCSVを読み込みました．現在経験値 ${formatNumber(safeExp)} で計算済みです．1勝あたりEXP: ${formatNumber(getExpPerWin())}`, 'good');
+      setStatus(`Tier${tier} のCSVを読み込みました．現在Rank ${currentRank} / 現在経験値 ${formatNumber(safeExp)} で計算済みです．1勝あたりEXP: ${formatNumber(getExpPerWin())}`, 'good');
     }
 
     async function calculate() {
       const tier = Number(tierSelect.value);
+      const currentRank = Number(currentRankSelect.value);
       const currentExp = parseNumberInput(currentExpInput.value);
 
       if (Number.isNaN(currentExp) || currentExp < 0) {
@@ -572,8 +581,8 @@
         const data = await loadTierData(tier);
         const maxExp = Math.max(...data.map(row => row.exp || 0));
         const safeExp = Math.min(currentExp, maxExp);
-        lastCalculation = { data, safeExp, tier };
-        renderResults(data, safeExp, tier);
+      lastCalculation = { data, safeExp, tier, currentRank };
+      renderResults(data, safeExp, tier, currentRank);
       } catch (error) {
         console.error(error);
         setStatus(`エラー: ${error.message}`, 'bad');
@@ -590,12 +599,27 @@
       });
     }
 
+    function populateCurrentRankOptions() {
+      currentRankSelect.innerHTML = Array.from({ length: 50 }, (_, i) => {
+        const rank = i + 1;
+        const selected = rank === 1 ? 'selected' : '';
+        return `<option value="${rank}" ${selected}>Rank ${rank}</option>`;
+      }).join('');
+    }
+
+populateCurrentRankOptions();
+
     OPTION_IDS.forEach(id => {
       const el = document.getElementById(id);
       el.addEventListener('change', () => {
         handleVoucherToggle(id);
         if (lastCalculation) {
-          renderResults(lastCalculation.data, lastCalculation.safeExp, lastCalculation.tier);
+          renderResults(
+            lastCalculation.data,
+            lastCalculation.safeExp,
+            lastCalculation.tier,
+            lastCalculation.currentRank
+          );
         }
       });
     });
@@ -606,7 +630,7 @@
     });
 
     loadTierData(Number(tierSelect.value))
-      .then(() => setStatus('CSV読込完了．経験値を入れて計算してください．', 'good'))
+      .then(() => setStatus('CSV読込完了．現在Rank・経験値を入れて計算してください．', 'good'))
       .catch(err => setStatus(`初期読込エラー: ${err.message}`, 'bad'));
   </script>
 </body>

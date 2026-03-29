@@ -332,7 +332,7 @@
     function buildRankCard(rank, requiredExp, requiredCredits, badgeRequirement) {
       const badgeHtml = badgeRequirement
         ? `
-          <div class="line"><strong>必要なバッジ数</strong></div>
+          <div class="line"><strong>必要なバッジ</strong></div>
           <div style="display:flex; gap:12px; flex-wrap:wrap;">
             ${BADGE_ORDER
               .filter(key => badgeRequirement[key] > 0)

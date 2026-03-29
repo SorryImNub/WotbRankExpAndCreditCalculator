@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
+  <link rel="stylesheet" href="style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>wotb Rank上げシミュレーター</title>
   <style>
@@ -313,6 +314,12 @@
     function getBadgeRequirement(targetRow) {
       const parsed = parseBudgetCell(targetRow.budge);
       if (!parsed) return null;
+      const BADGE_IMAGE = {
+        M: 'images/M.jpg',
+        '1': 'images/1.jpg',
+        '2': 'images/2.jpg',
+        '3': 'images/3.jpg'
+      };
 
       const needMap = { M: 0, '1': 0, '2': 0, '3': 0 };
       const targetIndex = BADGE_ORDER.indexOf(parsed.badge);
@@ -336,21 +343,27 @@
       return new Intl.NumberFormat('ja-JP').format(Math.round(num));
     }
 
-    function buildRankCard(rank, requiredExp, requiredCredits, badgeRequirement, isAlreadyEnough) {
-      const badgeHtml = isAlreadyEnough
-        ? '<div class="line">Rank上げに必要なバッジ数は足りています。</div>'
-        : badgeRequirement
-          ? `
-            <div class="line"><strong>必要なバッジ数</strong></div>
-            <ul class="badge-list">
-              ${BADGE_ORDER.map(key => `<li>${BADGE_LABEL[key]} はあと ${formatNumber(badgeRequirement[key])} 個必要です</li>`).join('')}
-            </ul>
-          `
-          : '<div class="line muted">このRankにはバッジ条件の設定がありません。</div>';
+    function buildRankCard(rank, requiredExp, requiredCredits, badgeRequirement) {
+      const badgeHtml = badgeRequirement
+        ? `
+          <div class="line"><strong>必要なバッジ数</strong></div>
+          <ul class="badge-list">
+            ${BADGE_ORDER.map(key => `
+              <li>
+                <img src="images/${key}.jpg" class="emoji-like">
+                ${BADGE_LABEL[key]} はあと ${formatNumber(badgeRequirement[key])} 個必要です
+              </li>
+            `).join('')}
+          </ul>
+        `
+        : '<div class="line muted">このRankにはバッジ条件の設定がありません。</div>';
 
       return `
         <div class="rank-box">
-          <div class="rank-title">Rank ${rank}</div>
+          <div class="rank-title">
+            <img src="images/${rank}.jpg" class="emoji-like">
+            Rank ${rank}
+          </div>
           <div class="line">必要経験値: <strong>${formatNumber(requiredExp)}</strong></div>
           <div class="line">必要クレジット: <strong>${formatNumber(requiredCredits)}</strong></div>
           ${badgeHtml}
@@ -380,18 +393,18 @@
           if (!row) {
             return `
               <div class="rank-box">
-                <div class="rank-title">Rank ${rank}</div>
+                <div class="rank-title">
+                  <img src="images/${rank}.jpg" class="emoji-like">
+                  Rank ${rank}
+                </div>
                 <div class="line muted">データがありません。</div>
               </div>
             `;
           }
 
-          const requiredExp = getRequiredExp(safeExp, row);
-          const requiredCredits = getRequiredCredits(safeExp, row);
-          const isAlreadyEnough = safeExp >= row.exp;
-          const badgeRequirement = isAlreadyEnough ? null : getBadgeRequirement(row);
+          const badgeRequirement = getBadgeRequirement(row);
 
-          return buildRankCard(rank, requiredExp, requiredCredits, badgeRequirement, isAlreadyEnough);
+          return buildRankCard(rank, requiredExp, requiredCredits, badgeRequirement);
         }).join('');
 
         resultsEl.innerHTML = html;

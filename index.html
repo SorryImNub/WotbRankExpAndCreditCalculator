@@ -433,7 +433,7 @@
     async function loadTierData(tier) {
       if (csvCache[tier]) return csvCache[tier];
       const url = CSV_URLS[tier];
-      if (!url) throw new Error(`Tier${tier} のCSV URLが未設定です。`);
+      if (!url) throw new Error(`Tier${tier} のCSV URLが未設定です．`);
 
       const response = await fetch(url, { cache: 'no-store' });
       if (!response.ok) {
@@ -511,7 +511,7 @@
               `).join('')}
           </div>
         `
-        : '<div class="line muted">このRankにはバッジ条件の設定がありません。</div>';
+        : '<div class="line muted">このRankにはバッジ条件の設定がありません．</div>';
 
       const winsNeeded = getWinsNeeded(requiredExp);
 
@@ -539,7 +539,7 @@
                 <img src="images/${rank}.jpg" class="emoji-like">
                 Rank ${rank}
               </div>
-              <div class="line muted">データがありません。</div>
+              <div class="line muted">データがありません．</div>
             </div>
           `;
         }
@@ -552,7 +552,7 @@
       }).join('');
 
       resultsEl.innerHTML = html;
-      setStatus(`Tier${tier} のCSVを読み込みました。現在経験値 ${formatNumber(safeExp)} で計算済みです。1勝あたりEXP: ${formatNumber(getExpPerWin())}`, 'good');
+      setStatus(`Tier${tier} のCSVを読み込みました．現在経験値 ${formatNumber(safeExp)} で計算済みです．1勝あたりEXP: ${formatNumber(getExpPerWin())}`, 'good');
     }
 
     async function calculate() {
@@ -560,7 +560,7 @@
       const currentExp = parseNumberInput(currentExpInput.value);
 
       if (Number.isNaN(currentExp) || currentExp < 0) {
-        setStatus('経験値の入力形式が不正です。例: 4M / 32.4k / 125000', 'bad');
+        setStatus('経験値の入力形式が不正です．例: 4M / 32.4k / 125000', 'bad');
         resultsEl.innerHTML = '';
         lastCalculation = null;
         return;
@@ -606,7 +606,7 @@
     });
 
     loadTierData(Number(tierSelect.value))
-      .then(() => setStatus('CSV読込完了。経験値を入れて計算してください。', 'good'))
+      .then(() => setStatus('CSV読込完了．経験値を入れて計算してください．', 'good'))
       .catch(err => setStatus(`初期読込エラー: ${err.message}`, 'bad'));
   </script>
 </body>

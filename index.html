@@ -2,9 +2,8 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <link rel="stylesheet" href="style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>wotb Rank上げ</title>
+  <title>wotb Rank上げシミュレーター</title>
   <style>
     :root {
       --bg: #000000;
@@ -121,6 +120,82 @@
       gap: 14px;
     }
 
+    .option-panel {
+      margin-bottom: 20px;
+    }
+
+    .option-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+
+    .option-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .option-tile input {
+      display: none;
+    }
+
+    .option-box {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #0b0b0b;
+      padding: 10px;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: transform 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+      position: relative;
+    }
+
+    .option-box:hover {
+      transform: translateY(-1px);
+      border-color: #5a5a5a;
+    }
+
+    .option-tile input:checked + .option-box {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(255, 213, 79, 0.18);
+    }
+
+    .option-tile input:checked + .option-box::after {
+      content: '✓';
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .option-image {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+    }
+
+    .option-text {
+      font-size: 0.86rem;
+      text-align: center;
+      line-height: 1.35;
+      color: var(--text);
+    }
+
+    @media (max-width: 720px) {
+      .option-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
     .rank-box {
       border: 1px solid var(--border);
       border-radius: 16px;
@@ -133,6 +208,16 @@
       font-weight: 700;
       color: var(--accent);
       margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .emoji-like {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+      vertical-align: middle;
     }
 
     .line {
@@ -167,7 +252,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>wotb Rank上げ</h1>
+    <h1>wotb Rank上げシミュレーター</h1>
 
     <div class="card">
       <div class="controls">
@@ -192,26 +277,79 @@
 
       <div class="hint">
         入力例: <code>4M</code>, <code>32.4k</code>, <code>125000</code><br>
-        Tier6, Tier9のRank表の情報を探しています．詳しい方がいらっしゃいましたら，ご連絡を宜しくお願いします．
+        CSVの参照先は <code>CSV_URLS</code> を変えるだけで差し替え可能です。Tier9も同形式ならURL追加だけで動きます。
       </div>
 
       <div id="status" class="status">CSV読込待機中...</div>
     </div>
 
+    <div id="optionPanel" class="card option-panel">
+      <div class="option-title">勝利数オプション</div>
+      <div class="option-grid">
+        <label class="option-tile">
+          <input type="checkbox" id="optPremium">
+          <div class="option-box">
+            <img src="images/premium.jpg" class="option-image" alt="プレミアムアカウント">
+            <span class="option-text">プレミアムアカウント</span>
+          </div>
+        </label>
+
+        <label class="option-tile">
+          <input type="checkbox" id="optEpic">
+          <div class="option-box">
+            <img src="images/epic_booster.jpg" class="option-image" alt="エピック戦闘EXPブースター">
+            <span class="option-text">エピック戦闘EXPブースター</span>
+          </div>
+        </label>
+
+        <label class="option-tile voucher-tile">
+          <input type="checkbox" id="optX3">
+          <div class="option-box">
+            <img src="images/x3.jpg" class="option-image" alt="3倍証券">
+            <span class="option-text">3倍証券</span>
+          </div>
+        </label>
+
+        <label class="option-tile voucher-tile">
+          <input type="checkbox" id="optX4">
+          <div class="option-box">
+            <img src="images/x4.jpg" class="option-image" alt="4倍証券">
+            <span class="option-text">4倍証券</span>
+          </div>
+        </label>
+
+        <label class="option-tile voucher-tile">
+          <input type="checkbox" id="optX5">
+          <div class="option-box">
+            <img src="images/x5.jpg" class="option-image" alt="5倍証券">
+            <span class="option-text">5倍証券</span>
+          </div>
+        </label>
+
+        <label class="option-tile">
+          <input type="checkbox" id="optBoss">
+          <div class="option-box">
+            <img src="images/bigboss.jpg" class="option-image" alt="BIGBOSS or 転生">
+            <span class="option-text">BIGBOSS or 転生</span>
+          </div>
+        </label>
+      </div>
+    </div>
+
     <div id="results" class="result-grid"></div>
 
     <div class="card footer-note">
-      ※このシュミレーターは，wotb asia [-SU-]クランによって作成されました．about us →　<a href="https://sorryimnub.github.io/WorldOfTanksBlitz_SUclan_requirements/" target="_blank"> -SU- クラン </a><br>
+      GitHub Pagesで公開する場合は、このHTMLとCSVを同じリポジトリに置くか、
+      <code>CSV_URLS</code> にGitHubのraw URLを指定してください。人類は毎回パスを壊しがちなので、最初からここをまとめてあります。
     </div>
   </div>
 
   <script>
     const CSV_URLS = {
-      6: './csv/tier6.csv',
-      7: './csv/tier7.csv',
-      8: './csv/Tier8.csv',
-      9: './csv/Tier9.csv',
-      10: './csv/Tier10.csv'
+      7: './tier7.csv',
+      8: './Tier8.csv',
+      9: './Tier9.csv',
+      10: './Tier10.csv'
       // GitHub raw の例:
       // 7: 'https://raw.githubusercontent.com/your-name/your-repo/main/tier7.csv'
     };
@@ -225,6 +363,9 @@
       '3': '3バッジ'
     };
 
+    const OPTION_IDS = ['optPremium', 'optEpic', 'optX3', 'optX4', 'optX5', 'optBoss'];
+    let lastCalculation = null;
+
     const csvCache = {};
 
     const statusEl = document.getElementById('status');
@@ -232,6 +373,14 @@
     const calcBtn = document.getElementById('calcBtn');
     const tierSelect = document.getElementById('tierSelect');
     const currentExpInput = document.getElementById('currentExp');
+    const optionElements = {
+      premium: document.getElementById('optPremium'),
+      epic: document.getElementById('optEpic'),
+      x3: document.getElementById('optX3'),
+      x4: document.getElementById('optX4'),
+      x5: document.getElementById('optX5'),
+      boss: document.getElementById('optBoss')
+    };
 
     function setStatus(message, type = '') {
       statusEl.textContent = message;
@@ -309,19 +458,26 @@
       if (!match) return null;
       return { badge: match[1], count: Number(match[2]) };
     }
-  
+
     function getBadgeRequirement(targetRow) {
-      const BADGE_IMAGE = {
-        M: 'images/M.jpg',
-        '1': 'images/1.jpg',
-        '2': 'images/2.jpg',
-        '3': 'images/3.jpg'
-      };
       const parsed = parseBudgetCell(targetRow.budge);
       if (!parsed) return null;
 
       const needMap = { M: 0, '1': 0, '2': 0, '3': 0 };
-      needMap[parsed.badge] = parsed.count;
+      const targetIndex = BADGE_ORDER.indexOf(parsed.badge);
+      const baseCount = parsed.count;
+
+      BADGE_ORDER.forEach((badge, idx) => {
+        if (idx < targetIndex) {
+          const diff = targetIndex - idx;
+          needMap[badge] = baseCount * Math.pow(3, diff);
+        } else if (idx === targetIndex) {
+          needMap[badge] = baseCount;
+        } else {
+          needMap[badge] = Math.ceil(baseCount / Math.pow(3, idx - targetIndex));
+        }
+      });
+
       return needMap;
     }
 
@@ -329,11 +485,26 @@
       return new Intl.NumberFormat('ja-JP').format(Math.round(num));
     }
 
+    function getExpPerWin() {
+      let expPerWin = optionElements.boss.checked ? 1400 : 650;
+      if (optionElements.premium.checked) expPerWin *= 1.5;
+      if (optionElements.epic.checked) expPerWin *= 1.9;
+      if (optionElements.x3.checked) expPerWin *= 3;
+      if (optionElements.x4.checked) expPerWin *= 4;
+      if (optionElements.x5.checked) expPerWin *= 5;
+      return expPerWin;
+    }
+
+    function getWinsNeeded(requiredExp) {
+      if (requiredExp <= 0) return 0;
+      return Math.ceil(requiredExp / getExpPerWin());
+    }
+
     function buildRankCard(rank, requiredExp, requiredCredits, badgeRequirement) {
       const badgeHtml = badgeRequirement
         ? `
-          <div class="line"><strong>必要なバッジ</strong></div>
-          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <div class="line"><strong>必要なバッジ数</strong></div>
+          <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:8px;">
             ${BADGE_ORDER
               .filter(key => badgeRequirement[key] > 0)
               .map(key => `
@@ -344,7 +515,9 @@
               `).join('')}
           </div>
         `
-        : '';
+        : '<div class="line muted">このRankにはバッジ条件の設定がありません。</div>';
+
+      const winsNeeded = getWinsNeeded(requiredExp);
 
       return `
         <div class="rank-box">
@@ -352,11 +525,38 @@
             <img src="images/${rank}.jpg" class="emoji-like">
             Rank ${rank}
           </div>
-          <div class="line">必要残EXP: <img src="images/exp.jpg" class="emoji-like"><strong>${formatNumber(requiredExp)}</strong></div>
-          <div class="line">必要残りクレジット: <img src="images/credit.jpg" class="emoji-like"><strong>${formatNumber(requiredCredits)}</strong></div>
+          <div class="line">必要経験値: <strong>${formatNumber(requiredExp)}</strong></div>
+          <div class="line">必要クレジット: <strong>${formatNumber(requiredCredits)}</strong></div>
+          <div class="line">必要勝利数: <strong>${formatNumber(winsNeeded)}</strong></div>
           ${badgeHtml}
         </div>
       `;
+    }
+
+    function renderResults(data, safeExp, tier) {
+      const html = TARGET_RANKS.map(rank => {
+        const row = getRankRow(data, rank);
+        if (!row) {
+          return `
+            <div class="rank-box">
+              <div class="rank-title">
+                <img src="images/${rank}.jpg" class="emoji-like">
+                Rank ${rank}
+              </div>
+              <div class="line muted">データがありません。</div>
+            </div>
+          `;
+        }
+
+        const requiredExp = getRequiredExp(safeExp, row);
+        const requiredCredits = getRequiredCredits(safeExp, row);
+        const badgeRequirement = getBadgeRequirement(row);
+
+        return buildRankCard(rank, requiredExp, requiredCredits, badgeRequirement);
+      }).join('');
+
+      resultsEl.innerHTML = html;
+      setStatus(`Tier${tier} のCSVを読み込みました。現在経験値 ${formatNumber(safeExp)} で計算済みです。1勝あたりEXP: ${formatNumber(getExpPerWin())}`, 'good');
     }
 
     async function calculate() {
@@ -366,6 +566,7 @@
       if (Number.isNaN(currentExp) || currentExp < 0) {
         setStatus('経験値の入力形式が不正です。例: 4M / 32.4k / 125000', 'bad');
         resultsEl.innerHTML = '';
+        lastCalculation = null;
         return;
       }
 
@@ -375,36 +576,33 @@
         const data = await loadTierData(tier);
         const maxExp = Math.max(...data.map(row => row.exp || 0));
         const safeExp = Math.min(currentExp, maxExp);
-
-        const html = TARGET_RANKS.map(rank => {
-          const row = getRankRow(data, rank);
-          if (!row) {
-            return `
-              <div class="rank-box">
-                <div class="rank-title">
-                  <img src="images/${rank}.jpg" class="emoji-like">
-                  Rank ${rank}
-                </div>
-                <div class="line muted">データがありません。</div>
-              </div>
-            `;
-          }
-
-          const requiredExp = getRequiredExp(safeExp, row);
-          const requiredCredits = getRequiredCredits(safeExp, row);
-          const badgeRequirement = getBadgeRequirement(row);
-
-          return buildRankCard(rank, requiredExp, requiredCredits, badgeRequirement);
-        }).join('');
-
-        resultsEl.innerHTML = html;
-        setStatus(`Tier${tier} のCSVを読み込みました。現在経験値 ${formatNumber(safeExp)} で計算済みです。`, 'good');
+        lastCalculation = { data, safeExp, tier };
+        renderResults(data, safeExp, tier);
       } catch (error) {
         console.error(error);
         setStatus(`エラー: ${error.message}`, 'bad');
         resultsEl.innerHTML = '';
+        lastCalculation = null;
       }
     }
+
+    function handleVoucherToggle(changedId) {
+      if (!['optX3', 'optX4', 'optX5'].includes(changedId)) return;
+      if (!document.getElementById(changedId).checked) return;
+      ['optX3', 'optX4', 'optX5'].forEach(id => {
+        if (id !== changedId) document.getElementById(id).checked = false;
+      });
+    }
+
+    OPTION_IDS.forEach(id => {
+      const el = document.getElementById(id);
+      el.addEventListener('change', () => {
+        handleVoucherToggle(id);
+        if (lastCalculation) {
+          renderResults(lastCalculation.data, lastCalculation.safeExp, lastCalculation.tier);
+        }
+      });
+    });
 
     calcBtn.addEventListener('click', calculate);
     currentExpInput.addEventListener('keydown', (e) => {

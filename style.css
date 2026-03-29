@@ -10,3 +10,16 @@
   align-items: center;
   gap: 8px;
 }
+
+.footer-note a {
+  color: #ffa500;
+  text-decoration: none;
+}
+
+.footer-note a:visited {
+  color: #ffa500;
+}
+
+.footer-note a:hover {
+  color: #ffd54f;
+}

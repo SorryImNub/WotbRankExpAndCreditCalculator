@@ -1,6 +1,17 @@
-a {
-  color: #ffa500;
+.footer a {
+  color: #ffa500 !important;
+  text-decoration: none;
+  font-weight: 600;
 }
-a:visited {
-  color: #ffa500;
+
+.footer a:visited {
+  color: #ffa500 !important;
+}
+
+.footer a:hover {
+  color: #ffd54f !important;
+}
+
+.footer a:active {
+  color: #ffd54f !important;
 }

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>wotb Rank上げシミュレーター</title>
+  <style>
+    :root {
+      --bg: #000000;
+      --panel: #111111;
+      --panel-2: #1a1a1a;
+      --text: #f4f4f4;
+      --sub: #b9b9b9;
+      --accent: #ffd54f;
+      --border: #2a2a2a;
+      --good: #7CFC98;
+      --bad: #ff8a80;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Hiragino Sans", "Yu Gothic UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 32px 16px;
+    }
+
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 0 0 24px;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      color: var(--accent);
+      letter-spacing: 0.04em;
+    }
+
+    .card {
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      margin-bottom: 20px;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      align-items: end;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--sub);
+      font-size: 0.95rem;
+    }
+
+    select, input, button {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #0b0b0b;
+      color: var(--text);
+      padding: 14px;
+      font-size: 1rem;
+    }
+
+    input::placeholder { color: #7f7f7f; }
+
+    button {
+      background: var(--accent);
+      color: #111;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.12s ease, opacity 0.12s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      opacity: 0.95;
+    }
+
+    .hint {
+      margin-top: 10px;
+      color: var(--sub);
+      font-size: 0.92rem;
+    }
+
+    .status {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #0d0d0d;
+      border: 1px solid var(--border);
+      white-space: pre-wrap;
+    }
+
+    .status.good {
+      border-color: rgba(124, 252, 152, 0.35);
+      color: var(--good);
+    }
+
+    .status.bad {
+      border-color: rgba(255, 138, 128, 0.35);
+      color: var(--bad);
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+    }
+
+    .rank-box {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .rank-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .line {
+      margin: 8px 0;
+      line-height: 1.55;
+    }
+
+    .muted {
+      color: var(--sub);
+    }
+
+    .footer-note {
+      color: var(--sub);
+      font-size: 0.9rem;
+      margin-top: 14px;
+      line-height: 1.6;
+    }
+
+    .badge-list {
+      margin: 10px 0 0;
+      padding-left: 18px;
+    }
+
+    .badge-list li { margin: 6px 0; }
+
+    code {
+      background: rgba(255,255,255,0.06);
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>wotb Rank上げシミュレーター</h1>
+
+    <div class="card">
+      <div class="controls">
+        <div>
+          <label for="tierSelect">Tier</label>
+          <select id="tierSelect">
+            <option value="7">Tier7</option>
+            <option value="8">Tier8</option>
+            <option value="10">Tier10</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="currentExp">現在の経験値</label>
+          <input id="currentExp" type="text" placeholder="例: 4M / 32.4k / 125000" />
+        </div>
+
+        <div>
+          <button id="calcBtn">計算</button>
+        </div>
+      </div>
+
+      <div class="hint">
+        入力例: <code>4M</code>, <code>32.4k</code>, <code>125000</code><br>
+        CSVの参照先は <code>CSV_URLS</code> を変えるだけで差し替え可能です。Tier9も同形式ならURL追加だけで動きます。
+      </div>
+
+      <div id="status" class="status">CSV読込待機中...</div>
+    </div>
+
+    <div id="results" class="result-grid"></div>
+
+    <div class="card footer-note">
+      GitHub Pagesで公開する場合は、このHTMLとCSVを同じリポジトリに置くか、
+      <code>CSV_URLS</code> にGitHubのraw URLを指定してください。人類は毎回パスを壊しがちなので、最初からここをまとめてあります。
+    </div>
+  </div>
+
+  <script>
+    const CSV_URLS = {
+      7: './tier7.csv',
+      8: './Tier8.csv',
+      9: './Tier9.csv',
+      10: './Tier10.csv'
+      // GitHub raw の例:
+      // 7: 'https://raw.githubusercontent.com/your-name/your-repo/main/tier7.csv'
+    };
+
+    const TARGET_RANKS = [10, 15, 20, 25, 30, 35, 40, 45, 50];
+    const BADGE_ORDER = ['M', '1', '2', '3'];
+    const BADGE_LABEL = {
+      M: 'Mバッジ',
+      '1': '1バッジ',
+      '2': '2バッジ',
+      '3': '3バッジ'
+    };
+
+    const csvCache = {};
+
+    const statusEl = document.getElementById('status');
+    const resultsEl = document.getElementById('results');
+    const calcBtn = document.getElementById('calcBtn');
+    const tierSelect = document.getElementById('tierSelect');
+    const currentExpInput = document.getElementById('currentExp');
+
+    function setStatus(message, type = '') {
+      statusEl.textContent = message;
+      statusEl.className = `status ${type}`.trim();
+    }
+
+    function parseNumberInput(raw) {
+      if (!raw || !raw.trim()) return NaN;
+      const value = raw.trim().replace(/,/g, '').toLowerCase();
+      const match = value.match(/^([0-9]+(?:\.[0-9]+)?)([mk])?$/);
+      if (!match) return NaN;
+
+      const num = Number(match[1]);
+      const suffix = match[2];
+      if (suffix === 'm') return Math.round(num * 1_000_000);
+      if (suffix === 'k') return Math.round(num * 1_000);
+      return Math.round(num);
+    }
+
+    function parseCSV(text) {
+      const lines = text.trim().split(/\r?\n/).filter(Boolean);
+      if (!lines.length) return [];
+
+      const headers = lines[0].split(',').map(h => h.trim());
+      return lines.slice(1).map(line => {
+        const cols = line.split(',');
+        const row = {};
+        headers.forEach((header, i) => {
+          row[header] = (cols[i] ?? '').trim();
+        });
+        row.rank = Number(row.rank);
+        row.exp = Number(row.exp);
+        row.exp_sum = Number(row.exp_sum);
+        row.credit = Number(row.credit);
+        row.credit_sum = Number(row.credit_sum);
+        row.budge = row.budge || '';
+        return row;
+      });
+    }
+
+    async function loadTierData(tier) {
+      if (csvCache[tier]) return csvCache[tier];
+      const url = CSV_URLS[tier];
+      if (!url) throw new Error(`Tier${tier} のCSV URLが未設定です。`);
+
+      const response = await fetch(url, { cache: 'no-store' });
+      if (!response.ok) {
+        throw new Error(`Tier${tier} のCSV取得に失敗しました: ${response.status}`);
+      }
+
+      const text = await response.text();
+      const data = parseCSV(text);
+      csvCache[tier] = data;
+      return data;
+    }
+
+    function getRankRow(data, rank) {
+      return data.find(row => row.rank === rank);
+    }
+
+    function getRequiredExp(currentExp, targetRow) {
+      return Math.max(0, targetRow.exp_sum - currentExp);
+    }
+
+    function getRequiredCredits(currentExp, targetRow, data) {
+      if (currentExp >= targetRow.exp_sum) return 0;
+
+      let total = 0;
+      let previousExpSum = 0;
+
+      for (const row of data) {
+        if (row.rank <= 1) {
+          previousExpSum = row.exp_sum;
+          continue;
+        }
+
+        const segmentStart = previousExpSum;
+        const segmentEnd = row.exp_sum;
+        previousExpSum = row.exp_sum;
+
+        if (currentExp >= segmentEnd) continue;
+        if (segmentStart >= targetRow.exp_sum) break;
+
+        const effectiveStart = Math.max(currentExp, segmentStart);
+        const effectiveEnd = Math.min(targetRow.exp_sum, segmentEnd);
+        const segmentLength = segmentEnd - segmentStart;
+        const neededLength = effectiveEnd - effectiveStart;
+
+        if (neededLength > 0 && segmentLength > 0) {
+          total += row.credit * (neededLength / segmentLength);
+        }
+      }
+
+      return Math.ceil(total);
+    }
+
+    function parseBudgetCell(cell) {
+      if (!cell) return null;
+      const match = String(cell).match(/^([M123])_(\d+)$/);
+      if (!match) return null;
+      return { badge: match[1], count: Number(match[2]) };
+    }
+
+    function getBadgeRequirement(targetRow) {
+      const parsed = parseBudgetCell(targetRow.budge);
+      if (!parsed) return null;
+
+      const needMap = { M: 0, '1': 0, '2': 0, '3': 0 };
+      const targetIndex = BADGE_ORDER.indexOf(parsed.badge);
+      const baseCount = parsed.count;
+
+      BADGE_ORDER.forEach((badge, idx) => {
+        if (idx < targetIndex) {
+          const diff = targetIndex - idx;
+          needMap[badge] = baseCount * Math.pow(3, diff);
+        } else if (idx === targetIndex) {
+          needMap[badge] = baseCount;
+        } else {
+          needMap[badge] = Math.ceil(baseCount / Math.pow(3, idx - targetIndex));
+        }
+      });
+
+      return needMap;
+    }
+
+    function formatNumber(num) {
+      return new Intl.NumberFormat('ja-JP').format(Math.round(num));
+    }
+
+    function buildRankCard(rank, requiredExp, requiredCredits, badgeRequirement, isAlreadyEnough) {
+      const badgeHtml = isAlreadyEnough
+        ? '<div class="line">Rank上げに必要なバッジ数は足りています。</div>'
+        : badgeRequirement
+          ? `
+            <div class="line"><strong>必要なバッジ数</strong></div>
+            <ul class="badge-list">
+              ${BADGE_ORDER.map(key => `<li>${BADGE_LABEL[key]} はあと ${formatNumber(badgeRequirement[key])} 個必要です</li>`).join('')}
+            </ul>
+          `
+          : '<div class="line muted">このRankにはバッジ条件の設定がありません。</div>';
+
+      return `
+        <div class="rank-box">
+          <div class="rank-title">Rank ${rank}</div>
+          <div class="line">必要経験値: <strong>${formatNumber(requiredExp)}</strong></div>
+          <div class="line">必要クレジット: <strong>${formatNumber(requiredCredits)}</strong></div>
+          ${badgeHtml}
+        </div>
+      `;
+    }
+
+    async function calculate() {
+      const tier = Number(tierSelect.value);
+      const currentExp = parseNumberInput(currentExpInput.value);
+
+      if (Number.isNaN(currentExp) || currentExp < 0) {
+        setStatus('経験値の入力形式が不正です。例: 4M / 32.4k / 125000', 'bad');
+        resultsEl.innerHTML = '';
+        return;
+      }
+
+      setStatus('計算中...', '');
+
+      try {
+        const data = await loadTierData(tier);
+        const maxExp = Math.max(...data.map(row => row.exp_sum || 0));
+        const safeExp = Math.min(currentExp, maxExp);
+
+        const html = TARGET_RANKS.map(rank => {
+          const row = getRankRow(data, rank);
+          if (!row) {
+            return `
+              <div class="rank-box">
+                <div class="rank-title">Rank ${rank}</div>
+                <div class="line muted">データがありません。</div>
+              </div>
+            `;
+          }
+
+          const requiredExp = getRequiredExp(safeExp, row);
+          const requiredCredits = getRequiredCredits(safeExp, row, data);
+          const isAlreadyEnough = safeExp >= row.exp_sum;
+          const badgeRequirement = isAlreadyEnough ? null : getBadgeRequirement(row);
+
+          return buildRankCard(rank, requiredExp, requiredCredits, badgeRequirement, isAlreadyEnough);
+        }).join('');
+
+        resultsEl.innerHTML = html;
+        setStatus(`Tier${tier} のCSVを読み込みました。現在経験値 ${formatNumber(safeExp)} で計算済みです。`, 'good');
+      } catch (error) {
+        console.error(error);
+        setStatus(`エラー: ${error.message}`, 'bad');
+        resultsEl.innerHTML = '';
+      }
+    }
+
+    calcBtn.addEventListener('click', calculate);
+    currentExpInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') calculate();
+    });
+
+    loadTierData(Number(tierSelect.value))
+      .then(() => setStatus('CSV読込完了。経験値を入れて計算してください。', 'good'))
+      .catch(err => setStatus(`初期読込エラー: ${err.message}`, 'bad'));
+  </script>
+</body>
+</html>

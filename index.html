@@ -277,7 +277,7 @@
 
       <div class="hint">
         入力例: <code>4M</code>, <code>32.4k</code>, <code>125000</code><br>
-        CSVの参照先は <code>CSV_URLS</code> を変えるだけで差し替え可能です。Tier9も同形式ならURL追加だけで動きます。
+        現在，Tier6 / Tier9 のデータを作成中です．有識者の方は，ぜひCSV作成にご協力ください．
       </div>
 
       <div id="status" class="status">CSV読込待機中...</div>
@@ -339,7 +339,16 @@
     <div id="results" class="result-grid"></div>
 
     <div class="card footer-note">
-      omg
+      このツールは，wotb asia <img src="images/fk.jpg" class="emoji-like">[-SU-]クランによって作成されました．詳しくは→ <a href="https://sorryimnub.github.io/WorldOfTanksBlitz_SUclan_requirements/" target="_blank" rel="noopener noreferrer"> -SU- クラン </a><br>
+    </div>
+
+    <div class="footer">
+      <p>Contact: <strong>Sorry_Im_Nub (世紀末_wotb) </strong></p>
+      <p>
+        連絡先 (Discord): <a href="https://discord.gg/mdaRVA63YT" target="_blank" rel="noopener noreferrer">Discord</a><br>
+        連絡先 (X / Twitter): <a href="https://x.com/EoC_wotb" target="_blank" rel="noopener noreferrer">X (Twitter)</a>
+      </p>
+      <p>最終更新日: 2026/03/29</p>
     </div>
   </div>
 
@@ -503,7 +512,7 @@
     function buildRankCard(rank, requiredExp, requiredCredits, badgeRequirement) {
       const badgeHtml = badgeRequirement
         ? `
-          <div class="line"><strong>必要なバッジ数</strong></div>
+          <div class="line"><strong>必要バッジ数</strong></div>
           <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:8px;">
             ${BADGE_ORDER
               .filter(key => badgeRequirement[key] > 0)
@@ -525,8 +534,8 @@
             <img src="images/${rank}.jpg" class="emoji-like">
             Rank ${rank}
           </div>
-          <div class="line">必要経験値: <strong>${formatNumber(requiredExp)}</strong></div>
-          <div class="line">必要クレジット: <strong>${formatNumber(requiredCredits)}</strong></div>
+          <div class="line">必要EXP: <img src="images/exp.jpg" class="emoji-like"><strong>${formatNumber(requiredExp)}</strong></div>
+          <div class="line">必要クレジット: <img src="images/credit.jpg" class="emoji-like"><strong>${formatNumber(requiredCredits)}</strong></div>
           <div class="line">必要勝利数: <strong>${formatNumber(winsNeeded)}</strong></div>
           ${badgeHtml}
         </div>

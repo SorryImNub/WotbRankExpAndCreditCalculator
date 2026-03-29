@@ -1,39 +1,6 @@
-.emoji-like {
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
-  vertical-align: middle;
-}
-
-.rank-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.footer-note a {
-  color: #ffa500;
-  text-decoration: none;
-}
-
-.footer-note a:visited {
+a {
   color: #ffa500;
 }
-
-.footer-note a:hover {
-  color: #ffd54f;
-}
-
-.footer a {
+a:visited {
   color: #ffa500;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.footer a:visited {
-  color: #ffa500;
-}
-
-.footer a:hover {
-  color: #ffd54f;
 }

@@ -325,16 +325,6 @@
       const targetIndex = BADGE_ORDER.indexOf(parsed.badge);
       const baseCount = parsed.count;
 
-      BADGE_ORDER.forEach((badge, idx) => {
-        if (idx < targetIndex) {
-          const diff = targetIndex - idx;
-          needMap[badge] = baseCount * Math.pow(3, diff);
-        } else if (idx === targetIndex) {
-          needMap[badge] = baseCount;
-        } else {
-          needMap[badge] = Math.ceil(baseCount / Math.pow(3, idx - targetIndex));
-        }
-      });
 
       return needMap;
     }

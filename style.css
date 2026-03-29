@@ -23,3 +23,17 @@
 .footer-note a:hover {
   color: #ffd54f;
 }
+
+.footer a {
+  color: #ffa500;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.footer a:visited {
+  color: #ffa500;
+}
+
+.footer a:hover {
+  color: #ffd54f;
+}

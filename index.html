@@ -310,22 +310,19 @@
       if (!match) return null;
       return { badge: match[1], count: Number(match[2]) };
     }
-
+  
     function getBadgeRequirement(targetRow) {
-      const parsed = parseBudgetCell(targetRow.budge);
-      if (!parsed) return null;
       const BADGE_IMAGE = {
         M: 'images/M.jpg',
         '1': 'images/1.jpg',
         '2': 'images/2.jpg',
         '3': 'images/3.jpg'
       };
+      const parsed = parseBudgetCell(targetRow.budge);
+      if (!parsed) return null;
 
       const needMap = { M: 0, '1': 0, '2': 0, '3': 0 };
-      const targetIndex = BADGE_ORDER.indexOf(parsed.badge);
-      const baseCount = parsed.count;
-
-
+      needMap[parsed.badge] = parsed.count;
       return needMap;
     }
 
@@ -337,16 +334,18 @@
       const badgeHtml = badgeRequirement
         ? `
           <div class="line"><strong>必要なバッジ数</strong></div>
-          <ul class="badge-list">
-            ${BADGE_ORDER.map(key => `
-              <li>
-                <img src="images/${key}.jpg" class="emoji-like">
-                ${BADGE_LABEL[key]} はあと ${formatNumber(badgeRequirement[key])} 個必要です
-              </li>
-            `).join('')}
-          </ul>
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            ${BADGE_ORDER
+              .filter(key => badgeRequirement[key] > 0)
+              .map(key => `
+                <div style="display:flex; align-items:center; gap:4px;">
+                  <img src="images/${key}.jpg" class="emoji-like">
+                  <span style="font-weight:600;">×${formatNumber(badgeRequirement[key])}</span>
+                </div>
+              `).join('')}
+          </div>
         `
-        : '<div class="line muted">このRankにはバッジ条件の設定がありません。</div>';
+        : '';
 
       return `
         <div class="rank-box">
@@ -354,8 +353,8 @@
             <img src="images/${rank}.jpg" class="emoji-like">
             Rank ${rank}
           </div>
-          <div class="line">必要経験値: <strong>${formatNumber(requiredExp)}</strong></div>
-          <div class="line">必要クレジット: <strong>${formatNumber(requiredCredits)}</strong></div>
+          <div class="line">必要残EXP: <img src="images/exp.jpg" class="emoji-like"><strong>${formatNumber(requiredExp)}</strong></div>
+          <div class="line">必要残りクレジット: <img src="images/credit.jpg" class="emoji-like"><strong>${formatNumber(requiredCredits)}</strong></div>
           ${badgeHtml}
         </div>
       `;

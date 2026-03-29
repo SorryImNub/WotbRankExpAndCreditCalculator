@@ -402,6 +402,8 @@
             `;
           }
 
+          const requiredExp = getRequiredExp(safeExp, row);
+          const requiredCredits = getRequiredCredits(safeExp, row);
           const badgeRequirement = getBadgeRequirement(row);
 
           return buildRankCard(rank, requiredExp, requiredCredits, badgeRequirement);

@@ -584,8 +584,8 @@
 
       try {
         const data = await loadTierData(tier);
-        const maxExp = Math.max(...data.map(row => row.exp || 0));
-        const safeExp = Math.min(currentExp, maxExp);
+        const maxExp = Math.max(...data.map(row => row.exp_sum || 0));
+        const safeExp = currentExp;
       lastCalculation = { data, safeExp, tier, currentRank };
       renderResults(data, safeExp, tier, currentRank);
       } catch (error) {

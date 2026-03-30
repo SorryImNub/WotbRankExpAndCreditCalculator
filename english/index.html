@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>wotb Rank上げ</title>
+  <title>world of Tanks Blitz Rank System Calculator</title>
   <style>
     :root {
       --bg: #000000;
@@ -252,7 +252,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>wotb Rank上げ</h1>
+    <h1>world of Tanks Blitz Rank System Calculator</h1>
     <div class="footer">
       日本語: <a href="https://sorryimnub.github.io/WotbRankExpAndCreditCalculator/" target="_blank" > 日本語版 </a><br>
       English: <a href="https://sorryimnub.github.io/WotbRankExpAndCreditCalculator/english"> English Version </a><br>
@@ -272,75 +272,75 @@
         </div>
 
         <div>
-          <label for="currentRank">現在のRank</label>
+          <label for="currentRank">Current Rank</label>
           <select id="currentRank"></select>
         </div>
 
         <div>
-          <label for="currentExp">現在の経験値</label>
-          <input id="currentExp" type="text" placeholder="例: 4M / 32.4k / 125000" />
+          <label for="currentExp">Current Experience</label>
+          <input id="currentExp" type="text" placeholder="e.g., 4M / 32.4k / 125000" />
         </div>
 
         <div>
-          <button id="calcBtn">計算</button>
+          <button id="calcBtn">Calculate</button>
         </div>
       </div>
 
       <div class="hint">
-        入力例: <code>4M</code>, <code>32.4k</code>, <code>125000</code><br>
+        Example inputs: <code>4M</code>, <code>32.4k</code>, <code>125000</code><br>
       </div>
 
-      <div id="status" class="status">CSV読込待機中...</div>
+      <div id="status" class="status">CSV reading...</div>
     </div>
 
     <div id="optionPanel" class="card option-panel">
-      <div class="option-title">勝利数オプション</div>
+      <div class="option-title">Victory Count Options</div>
       <div class="option-grid">
         <label class="option-tile">
           <input type="checkbox" id="optPremium">
           <div class="option-box">
-            <img src="images/premium.jpg" class="option-image" alt="プレミアムアカウント">
-            <span class="option-text">プレミアムアカウント</span>
+            <img src="images/premium.jpg" class="option-image" alt="Premium Account">
+            <span class="option-text">Premium Account</span>
           </div>
         </label>
 
         <label class="option-tile">
           <input type="checkbox" id="optEpic">
           <div class="option-box">
-            <img src="images/epic_booster.jpg" class="option-image" alt="エピック戦闘EXPブースター">
-            <span class="option-text">エピックブースター</span>
+            <img src="images/epic_booster.jpg" class="option-image" alt="Epic Battle EXP Booster">
+            <span class="option-text">Epic Booster</span>
           </div>
         </label>
 
         <label class="option-tile voucher-tile">
           <input type="checkbox" id="optX3">
           <div class="option-box">
-            <img src="images/x3.jpg" class="option-image" alt="3倍証券">
-            <span class="option-text">3倍証券</span>
+            <img src="images/x3.jpg" class="option-image" alt="3x EXP securities">
+            <span class="option-text">3x EXP securities</span>
           </div>
         </label>
 
         <label class="option-tile voucher-tile">
           <input type="checkbox" id="optX4">
           <div class="option-box">
-            <img src="images/x4.jpg" class="option-image" alt="4倍証券">
-            <span class="option-text">4倍証券</span>
+            <img src="images/x4.jpg" class="option-image" alt="4x EXP securities">
+            <span class="option-text">4x EXP securities</span>
           </div>
         </label>
 
         <label class="option-tile voucher-tile">
           <input type="checkbox" id="optX5">
           <div class="option-box">
-            <img src="images/x5.jpg" class="option-image" alt="5倍証券">
-            <span class="option-text">5倍証券</span>
+            <img src="images/x5.jpg" class="option-image" alt="5x EXP securities">
+            <span class="option-text">5x EXP securities</span>
           </div>
         </label>
 
         <label class="option-tile">
           <input type="checkbox" id="optBoss">
           <div class="option-box">
-            <img src="images/bigboss.jpg" class="option-image" alt="BIGBOSS or 転生">
-            <span class="option-text">BIGBOSS or 転生</span>
+            <img src="images/bigboss.jpg" class="option-image" alt="BIGBOSS or Uprising">
+            <span class="option-text">BIGBOSS or Uprising</span>
           </div>
         </label>
       </div>
@@ -349,16 +349,16 @@
     <div id="results" class="result-grid"></div>
 
     <div class="fcard footer-note">
-      このツールは，wotb asia <img src="images/fk.jpg" class="emoji-like">[-SU-]クランによって作成されました．詳しくは→ <a href="https://sorryimnub.github.io/WorldOfTanksBlitz_SUclan_requirements/" target="_blank" > -SU- クラン </a><br>
+      This tool was created by the <img src="images/fk.jpg" class="emoji-like">[-SU-] clan (in asia server). For more information, visit here: <a href="https://sorryimnub.github.io/WorldOfTanksBlitz_SUclan_requirements/" target="_blank" > -SU- clan </a><br>
     </div>
 
     <div class="card footer-note">
       <p>Contact: <strong>Sorry_Im_Nub (世紀末_wotb) </strong></p>
       <p>
-        連絡先 (Discord): <a href="https://discord.gg/mdaRVA63YT" target="_blank">Discord</a><br>
-        連絡先 (X / Twitter): <a href="https://x.com/EoC_wotb" target="_blank">X (Twitter)</a>
+        contact on Discord (Recommended): <a href="https://discord.gg/mdaRVA63YT" target="_blank">Discord</a><br>
+        contact on X (Twitter): <a href="https://x.com/EoC_wotb" target="_blank">X (Twitter)</a>
       </p>
-      <p>最終更新日: 2026/03/30</p>
+      <p>Final Update Date: 2026/03/30</p>
     </div>
   </div>
 
@@ -374,10 +374,10 @@
     const TARGET_RANKS = [10, 15, 20, 25, 30, 35, 40, 45, 50];
     const BADGE_ORDER = ['M', '1', '2', '3'];
     const BADGE_LABEL = {
-      M: 'Mバッジ',
-      '1': '1バッジ',
-      '2': '2バッジ',
-      '3': '3バッジ'
+      M: 'Mastery',
+      '1': '1st Badge',
+      '2': '2nd Badge',
+      '3': '3rd Badge'
     };
 
     const OPTION_IDS = ['optPremium', 'optEpic', 'optX3', 'optX4', 'optX5', 'optBoss'];
@@ -442,11 +442,11 @@
     async function loadTierData(tier) {
       if (csvCache[tier]) return csvCache[tier];
       const url = CSV_URLS[tier];
-      if (!url) throw new Error(`Tier${tier} のCSV URLが未設定です．`);
+      if (!url) throw new Error(`Tier${tier} CSV URL is not set.`);
 
       const response = await fetch(url, { cache: 'no-store' });
       if (!response.ok) {
-        throw new Error(`Tier${tier} のCSV取得に失敗しました: ${response.status}`);
+        throw new Error(`Failed to fetch CSV for Tier${tier}: ${response.status}`);
       }
 
       const text = await response.text();
@@ -510,7 +510,7 @@
     function buildRankCard(rank, requiredExp, requiredCredits, badgeRequirement) {
       const badgeHtml = badgeRequirement
         ? `
-          <div class="line"><strong>必要バッジ数</strong></div>
+          <div class="line"><strong>Required Badges</strong></div>
           <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:8px;">
             ${BADGE_ORDER
               .filter(key => badgeRequirement[key] > 0)
@@ -532,9 +532,9 @@
             <img src="images/${rank}.jpg" class="emoji-like">
             Rank ${rank}
           </div>
-          <div class="line">必要残EXP: <img src="images/exp.jpg" class="emoji-like"><strong>${formatNumber(requiredExp)}</strong></div>
-          <div class="line">必要残クレジット: <img src="images/credit.jpg" class="emoji-like"><strong>${formatNumber(requiredCredits)}</strong></div>
-          <div class="line">あと <strong>${formatNumber(winsNeeded)}</strong> 勝</div>
+          <div class="line">Required Remaining EXP: <img src="images/exp.jpg" class="emoji-like"><strong>${formatNumber(requiredExp)}</strong></div>
+          <div class="line">Required Remaining Credits: <img src="images/credit.jpg" class="emoji-like"><strong>${formatNumber(requiredCredits)}</strong></div>
+          <div class="line">Need <strong>${formatNumber(winsNeeded)}</strong> More Wins</div>
           ${badgeHtml}
         </div>
       `;
@@ -550,7 +550,7 @@
                 <img src="images/${rank}.jpg" class="emoji-like">
                 Rank ${rank}
               </div>
-              <div class="line muted">データがありません．</div>
+              <div class="line muted">No data available.</div>
             </div>
           `;
         }
@@ -563,7 +563,7 @@
       }).join('');
 
       resultsEl.innerHTML = html;
-      setStatus(`Tier${tier} のCSVを読み込みました．現在Rank ${currentRank} / 現在経験値 ${formatNumber(safeExp)} で計算済みです．1勝あたりEXP: ${formatNumber(getExpPerWin())}`, 'good');
+      setStatus(`Tier${tier} data loaded. Current Rank ${currentRank} / Current EXP ${formatNumber(safeExp)} calculated. EXP per Win: ${formatNumber(getExpPerWin())}`, 'good');
     }
 
     async function calculate() {
@@ -572,13 +572,13 @@
       const currentExp = parseNumberInput(currentExpInput.value);
 
       if (Number.isNaN(currentExp) || currentExp < 0) {
-        setStatus('経験値の入力形式が不正です．全角は使用できません．例: 4M / 32.4k / 125000', 'bad');
+        setStatus('Invalid input for experience points. Full-width characters are not allowed. Example: 4M / 32.4k / 125000', 'bad');
         resultsEl.innerHTML = '';
         lastCalculation = null;
         return;
       }
 
-      setStatus('計算中...', '');
+      setStatus('Calculating...', '');
 
       try {
         const data = await loadTierData(tier);
@@ -588,7 +588,7 @@
       renderResults(data, safeExp, tier, currentRank);
       } catch (error) {
         console.error(error);
-        setStatus(`エラー: ${error.message}`, 'bad');
+        setStatus(`Error: ${error.message}`, 'bad');
         resultsEl.innerHTML = '';
         lastCalculation = null;
       }
@@ -633,8 +633,8 @@ populateCurrentRankOptions();
     });
 
     loadTierData(Number(tierSelect.value))
-      .then(() => setStatus('CSV読込完了．現在Rank・経験値を入れて計算してください．', 'good'))
-      .catch(err => setStatus(`初期読込エラー: ${err.message}`, 'bad'));
+      .then(() => setStatus('CSV loading completed. Please enter your current rank and experience points to calculate.', 'good'))
+      .catch(err => setStatus(`Initial load error: ${err.message}`, 'bad'));
   </script>
 </body>
 </html>

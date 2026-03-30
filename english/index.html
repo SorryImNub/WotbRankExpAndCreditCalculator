@@ -300,7 +300,7 @@
         <label class="option-tile">
           <input type="checkbox" id="optPremium">
           <div class="option-box">
-            <img src="images/premium.jpg" class="option-image" alt="Premium Account">
+            <img src="../images/premium.jpg" class="option-image" alt="Premium Account">
             <span class="option-text">Premium Account</span>
           </div>
         </label>
@@ -308,7 +308,7 @@
         <label class="option-tile">
           <input type="checkbox" id="optEpic">
           <div class="option-box">
-            <img src="images/epic_booster.jpg" class="option-image" alt="Epic Battle EXP Booster">
+            <img src="../images/epic_booster.jpg" class="option-image" alt="Epic Battle EXP Booster">
             <span class="option-text">Epic Booster</span>
           </div>
         </label>
@@ -316,7 +316,7 @@
         <label class="option-tile voucher-tile">
           <input type="checkbox" id="optX3">
           <div class="option-box">
-            <img src="images/x3.jpg" class="option-image" alt="3x EXP securities">
+            <img src="../images/x3.jpg" class="option-image" alt="3x EXP securities">
             <span class="option-text">3x EXP securities</span>
           </div>
         </label>
@@ -324,7 +324,7 @@
         <label class="option-tile voucher-tile">
           <input type="checkbox" id="optX4">
           <div class="option-box">
-            <img src="images/x4.jpg" class="option-image" alt="4x EXP securities">
+            <img src="../images/x4.jpg" class="option-image" alt="4x EXP securities">
             <span class="option-text">4x EXP securities</span>
           </div>
         </label>
@@ -332,7 +332,7 @@
         <label class="option-tile voucher-tile">
           <input type="checkbox" id="optX5">
           <div class="option-box">
-            <img src="images/x5.jpg" class="option-image" alt="5x EXP securities">
+            <img src="../images/x5.jpg" class="option-image" alt="5x EXP securities">
             <span class="option-text">5x EXP securities</span>
           </div>
         </label>
@@ -340,7 +340,7 @@
         <label class="option-tile">
           <input type="checkbox" id="optBoss">
           <div class="option-box">
-            <img src="images/bigboss.jpg" class="option-image" alt="BIGBOSS or Uprising">
+            <img src="../images/bigboss.jpg" class="option-image" alt="BIGBOSS or Uprising">
             <span class="option-text">BIGBOSS or Uprising</span>
           </div>
         </label>
@@ -350,7 +350,7 @@
     <div id="results" class="result-grid"></div>
 
     <div class="fcard footer-note">
-      This tool was created by the <img src="images/fk.jpg" class="emoji-like">[-SU-] clan (in asia server). For more information, visit here: <a href="https://sorryimnub.github.io/WorldOfTanksBlitz_SUclan_requirements/" target="_blank" > -SU- clan </a><br>
+      This tool was created by the <img src="../images/fk.jpg" class="emoji-like">[-SU-] clan (in asia server). For more information, visit here: <a href="https://sorryimnub.github.io/WorldOfTanksBlitz_SUclan_requirements/" target="_blank" > -SU- clan </a><br>
     </div>
 
     <div class="card footer-note">
@@ -517,7 +517,7 @@
               .filter(key => badgeRequirement[key] > 0)
               .map(key => `
                 <div style="display:flex; align-items:center; gap:4px;">
-                  <img src="images/${key}.jpg" class="emoji-like">
+                  <img src="../images/${key}.jpg" class="emoji-like">
                   <span style="font-weight:600;">×${formatNumber(badgeRequirement[key])}</span>
                 </div>
               `).join('')}
@@ -530,11 +530,11 @@
       return `
         <div class="rank-box">
           <div class="rank-title">
-            <img src="images/${rank}.jpg" class="emoji-like">
+            <img src="../images/${rank}.jpg" class="emoji-like">
             Rank ${rank}
           </div>
-          <div class="line">Required Remaining EXP: <img src="images/exp.jpg" class="emoji-like"><strong>${formatNumber(requiredExp)}</strong></div>
-          <div class="line">Required Remaining Credits: <img src="images/credit.jpg" class="emoji-like"><strong>${formatNumber(requiredCredits)}</strong></div>
+          <div class="line">Required Remaining EXP: <img src="../images/exp.jpg" class="emoji-like"><strong>${formatNumber(requiredExp)}</strong></div>
+          <div class="line">Required Remaining Credits: <img src="../images/credit.jpg" class="emoji-like"><strong>${formatNumber(requiredCredits)}</strong></div>
           <div class="line">Need <strong>${formatNumber(winsNeeded)}</strong> More Wins</div>
           ${badgeHtml}
         </div>
@@ -548,7 +548,7 @@
           return `
             <div class="rank-box">
               <div class="rank-title">
-                <img src="images/${rank}.jpg" class="emoji-like">
+                <img src="../images/${rank}.jpg" class="emoji-like">
                 Rank ${rank}
               </div>
               <div class="line muted">No data available.</div>
